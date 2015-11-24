@@ -1,0 +1,74 @@
+#!/bin/csh -f
+#
+set OS = `uname | sed 's/ //'`-`uname -m | sed 's/ //'`
+#
+set template = Makefile.tmpl
+set includes = ../../include
+set bin_dest = ../../bin/$OS
+#
+if !(-e $template) then
+	echo $template not found
+	exit 1
+endif
+#
+if !(-d $OS) then
+	echo Creating $OS compile directory
+	mkdir $OS
+	if ($status) exit 1
+endif
+#
+foreach dir ($path)
+	if (-e $dir/gmake) then
+		alias make gmake
+		break
+	endif
+end	
+#
+if ($#argv > 0) then
+	set CC = "$argv[1]"
+else
+	set CC = "gcc -Wall"
+endif
+#
+if ($#argv > 1) then
+	set CFLAGS = "$argv[2]"
+else
+	set CFLAGS = "-O2 -g"
+endif
+#
+if ($#argv > 2) then
+	set LDFLAGS = "$argv[3]"
+else
+	set LDFLAGS = "" # "-Wl,-s"
+endif
+#
+if ($OS == SunOS) set LDFLAGS = ($LDFLAGS -lnsl)
+#
+mv -f $OS/Makefile{,.old} >& /dev/null
+cat $template |\
+	sed s@BUILD_OS@"$OS"@ |\
+	sed s@BUILD_CC@"$CC"@ |\
+	sed s@BUILD_CFLAGS@"$CFLAGS"@ |\
+	sed s@BUILD_LDFLAGS@"$LDFLAGS"@ >! $OS/Makefile
+chmod a-w $OS/Makefile
+diff $OS/Makefile{,.old} >& /dev/null
+if ($status == 1) rm -f $OS/*.o
+#
+if !(-d $bin_dest) then
+	echo Creating $bin_dest binary directory
+	mkdir $bin_dest
+	if ($status) exit 1
+endif
+#
+pushd $OS >& /dev/null
+make
+@ rv = $status
+popd >& /dev/null
+#
+if ($rv) then
+	echo Error code $rv occured during make
+	exit $rv
+endif
+#
+echo Done\!
+#

@@ -1,0 +1,47 @@
+SRC = $(shell cd .. && ls *.c)
+OBJ = $(SRC:.c=.o)
+TARGETS = $(SRC:.c=)
+TARGETS := $(filter-out genchunk,$(TARGETS))
+TARGETS := $(filter-out random,$(TARGETS))
+TARGETS := $(filter-out ssic_par,$(TARGETS))
+TARGETS := $(filter-out patchic_par,$(TARGETS))
+TARGETS := $(filter-out rpu,$(TARGETS))
+TARGETS := $(filter-out ssio,$(TARGETS))
+TARGETS := $(filter-out wallsio,$(TARGETS))
+
+VPATH	= ..
+TOP	= $(VPATH)/../..
+
+INCS	= -I$(VPATH) -I$(TOP)/include
+LDFLAGS+= -L$(TOP)/lib/$(OS) 
+LDLIBS+= -lmem_util -lraster -lrdpar -lvector -lcoords -lm
+
+CFLAGS += $(PKD_AND_SS_CFLAGS)
+
+BIN_DEST = $(TOP)/bin/$(OS)
+
+SSOBJ = random.o rpu.o ssio.o wallsio.o
+
+all: $(TARGETS)
+
+$(TARGETS): $(OBJ)
+	$(CC) $(CFLAGS) -o $@ $@.o $(LDFLAGS) $(SSOBJ) $(LDLIBS)
+	@rm -f $(BIN_DEST)/$@
+	@cp $@ $(BIN_DEST)
+
+*.o: ../../../Makefile ../../../Makefile.in $(TOP)/include/ssio.h Makefile.recurse
+%.o: %.c
+	$(CC) -c $(CFLAGS) $(INCS) $(VPATH)/$*.c
+
+ifeq ($(PKDGRAV_TYPE), mpi)
+ifeq ($(USE_PARALLEL_IO), true)
+ssic: genchunk.o
+	$(CC) $(CFLAGS) -o $@ $@.o $(LDFLAGS) $(SSOBJ) genchunk.o $(LDLIBS)
+	@rm -f $(BIN_DEST)/$@
+	@cp $@ $(BIN_DEST)
+endif
+endif
+
+clean:
+	rm -f *.o $(TARGETS) ssic
+

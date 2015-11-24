@@ -1,0 +1,134 @@
+Making on SRS-3000.local Darwin-x86_64 Mon Feb 23 19:09:30 CET 2015
+gcc -Wall  -c -O2 -g -I../../../include ../mem_util.c
+gcc -Wall  -c -O2 -g -I../../../include ../raster.c
+gcc -Wall  -c -O2 -g -I../../../include ../rdpar.c
+gcc -Wall  -c -O2 -g -I../../../include ../vector.c
+gcc -Wall  -c -O2 -g -I../../../include ../deltohel.c
+gcc -Wall  -c -O2 -g -I../../../include ../eccanom.c
+gcc -Wall  -c -O2 -g -I../../../include ../heltodel.c
+gcc -Wall  -c -O2 -g -I../../../include ../hypanom.c
+gcc -Wall  -c -O2 -g -I../../../include ../hyperlib.c
+gcc -Wall  -c -O2 -g -I../../../include ../paranom.c
+gcc -Wall  -c -O2 -g -I.. -I../../../include ../rastoppm.c
+gcc -Wall  -O2 -g  -o rastoppm rastoppm.o 
+gcc -Wall  -c -O2 -g  -I.. -I../../../include ../bin2ss.c
+gcc -Wall  -c -O2 -g  -I.. -I../../../include ../bt2ss.c
+gcc -Wall  -c -O2 -g  -I.. -I../../../include ../companion.c
+gcc -Wall  -c -O2 -g  -I.. -I../../../include ../dem2txt.c
+gcc -Wall  -c -O2 -g  -I.. -I../../../include ../demparams.c
+gcc -Wall  -c -O2 -g  -I.. -I../../../include ../genchunk.c
+gcc -Wall  -c -O2 -g  -I.. -I../../../include ../patcha.c
+gcc -Wall  -c -O2 -g  -I.. -I../../../include ../patchic.c
+gcc -Wall  -c -O2 -g  -I.. -I../../../include ../random.c
+gcc -Wall  -c -O2 -g  -I.. -I../../../include ../ranics.c
+gcc -Wall  -c -O2 -g  -I.. -I../../../include ../rotate.c
+gcc -Wall  -c -O2 -g  -I.. -I../../../include ../rp2.c
+gcc -Wall  -c -O2 -g  -I.. -I../../../include ../rpa.c
+gcc -Wall  -c -O2 -g  -I.. -I../../../include ../rpg.c
+gcc -Wall  -c -O2 -g  -I.. -I../../../include ../rpu.c
+gcc -Wall  -c -O2 -g  -I.. -I../../../include ../rpx.c
+gcc -Wall  -c -O2 -g  -I.. -I../../../include ../shape.c
+gcc -Wall  -c -O2 -g  -I.. -I../../../include ../spr2txt.c
+gcc -Wall  -c -O2 -g  -I.. -I../../../include ../spra.c
+gcc -Wall  -c -O2 -g  -I.. -I../../../include ../ss2bin.c
+gcc -Wall  -c -O2 -g  -I.. -I../../../include ../ss2bt.c
+gcc -Wall  -c -O2 -g  -I.. -I../../../include ../ss2red.c
+gcc -Wall  -c -O2 -g  -I.. -I../../../include ../ssa.c
+gcc -Wall  -c -O2 -g  -I.. -I../../../include ../sscube.c
+gcc -Wall  -c -O2 -g  -I.. -I../../../include ../ssdraw.c
+gcc -Wall  -c -O2 -g  -I.. -I../../../include ../ssg.c
+gcc -Wall  -c -O2 -g  -I.. -I../../../include ../ssgen.c
+gcc -Wall  -c -O2 -g  -I.. -I../../../include ../ssgetopt.c
+gcc -Wall  -c -O2 -g  -I.. -I../../../include ../ssgh.c
+gcc -Wall  -c -O2 -g  -I.. -I../../../include ../ssgrid.c
+gcc -Wall  -c -O2 -g  -I.. -I../../../include ../ssic.c
+gcc -Wall  -c -O2 -g  -I.. -I../../../include ../ssinfo.c
+gcc -Wall  -c -O2 -g  -I.. -I../../../include ../ssio.c
+gcc -Wall  -c -O2 -g  -I.. -I../../../include ../ssn.c
+gcc -Wall  -c -O2 -g  -I.. -I../../../include ../sst.c
+gcc -Wall  -c -O2 -g  -I.. -I../../../include ../sstidal.c
+gcc -Wall  -c -O2 -g  -I.. -I../../../include ../sstumbler.c
+gcc -Wall  -c -O2 -g  -I.. -I../../../include ../ssx.c
+gcc -Wall  -c -O2 -g  -I.. -I../../../include ../txt2dem.c
+gcc -Wall  -c -O2 -g  -I.. -I../../../include ../txt2spr.c
+gcc -Wall  -c -O2 -g  -I.. -I../../../include ../wallsio.c
+gcc -Wall  -O2 -g  -o bin2ss bin2ss.o  -L../../../lib/Darwin-x86_64  random.o rpu.o ssio.o wallsio.o  -lm  -lmem_util -lraster -lrdpar -lvector -lcoords -lm
+gcc -Wall  -O2 -g  -o bt2ss bt2ss.o  -L../../../lib/Darwin-x86_64  random.o rpu.o ssio.o wallsio.o  -lm  -lmem_util -lraster -lrdpar -lvector -lcoords -lm
+gcc -Wall  -O2 -g  -o companion companion.o  -L../../../lib/Darwin-x86_64  random.o rpu.o ssio.o wallsio.o  -lm  -lmem_util -lraster -lrdpar -lvector -lcoords -lm
+gcc -Wall  -O2 -g  -o dem2txt dem2txt.o  -L../../../lib/Darwin-x86_64  random.o rpu.o ssio.o wallsio.o  -lm  -lmem_util -lraster -lrdpar -lvector -lcoords -lm
+gcc -Wall  -O2 -g  -o demparams demparams.o  -L../../../lib/Darwin-x86_64  random.o rpu.o ssio.o wallsio.o  -lm  -lmem_util -lraster -lrdpar -lvector -lcoords -lm
+gcc -Wall  -O2 -g  -o patcha patcha.o  -L../../../lib/Darwin-x86_64  random.o rpu.o ssio.o wallsio.o  -lm  -lmem_util -lraster -lrdpar -lvector -lcoords -lm
+gcc -Wall  -O2 -g  -o patchic patchic.o  -L../../../lib/Darwin-x86_64  random.o rpu.o ssio.o wallsio.o  -lm  -lmem_util -lraster -lrdpar -lvector -lcoords -lm
+gcc -Wall  -O2 -g  -o ranics ranics.o  -L../../../lib/Darwin-x86_64  random.o rpu.o ssio.o wallsio.o  -lm  -lmem_util -lraster -lrdpar -lvector -lcoords -lm
+gcc -Wall  -O2 -g  -o rotate rotate.o  -L../../../lib/Darwin-x86_64  random.o rpu.o ssio.o wallsio.o  -lm  -lmem_util -lraster -lrdpar -lvector -lcoords -lm
+gcc -Wall  -O2 -g  -o rp2 rp2.o  -L../../../lib/Darwin-x86_64  random.o rpu.o ssio.o wallsio.o  -lm  -lmem_util -lraster -lrdpar -lvector -lcoords -lm
+gcc -Wall  -O2 -g  -o rpa rpa.o  -L../../../lib/Darwin-x86_64  random.o rpu.o ssio.o wallsio.o  -lm  -lmem_util -lraster -lrdpar -lvector -lcoords -lm
+gcc -Wall  -O2 -g  -o rpg rpg.o  -L../../../lib/Darwin-x86_64  random.o rpu.o ssio.o wallsio.o  -lm  -lmem_util -lraster -lrdpar -lvector -lcoords -lm
+gcc -Wall  -O2 -g  -o rpx rpx.o  -L../../../lib/Darwin-x86_64  random.o rpu.o ssio.o wallsio.o  -lm  -lmem_util -lraster -lrdpar -lvector -lcoords -lm
+gcc -Wall  -O2 -g  -o shape shape.o  -L../../../lib/Darwin-x86_64  random.o rpu.o ssio.o wallsio.o  -lm  -lmem_util -lraster -lrdpar -lvector -lcoords -lm
+gcc -Wall  -O2 -g  -o spr2txt spr2txt.o  -L../../../lib/Darwin-x86_64  random.o rpu.o ssio.o wallsio.o  -lm  -lmem_util -lraster -lrdpar -lvector -lcoords -lm
+gcc -Wall  -O2 -g  -o spra spra.o  -L../../../lib/Darwin-x86_64  random.o rpu.o ssio.o wallsio.o  -lm  -lmem_util -lraster -lrdpar -lvector -lcoords -lm
+gcc -Wall  -O2 -g  -o ss2bin ss2bin.o  -L../../../lib/Darwin-x86_64  random.o rpu.o ssio.o wallsio.o  -lm  -lmem_util -lraster -lrdpar -lvector -lcoords -lm
+gcc -Wall  -O2 -g  -o ss2bt ss2bt.o  -L../../../lib/Darwin-x86_64  random.o rpu.o ssio.o wallsio.o  -lm  -lmem_util -lraster -lrdpar -lvector -lcoords -lm
+gcc -Wall  -O2 -g  -o ss2red ss2red.o  -L../../../lib/Darwin-x86_64  random.o rpu.o ssio.o wallsio.o  -lm  -lmem_util -lraster -lrdpar -lvector -lcoords -lm
+gcc -Wall  -O2 -g  -o ssa ssa.o  -L../../../lib/Darwin-x86_64  random.o rpu.o ssio.o wallsio.o  -lm  -lmem_util -lraster -lrdpar -lvector -lcoords -lm
+gcc -Wall  -O2 -g  -o sscube sscube.o  -L../../../lib/Darwin-x86_64  random.o rpu.o ssio.o wallsio.o  -lm  -lmem_util -lraster -lrdpar -lvector -lcoords -lm
+gcc -Wall  -O2 -g  -o ssdraw ssdraw.o  -L../../../lib/Darwin-x86_64  random.o rpu.o ssio.o wallsio.o  -lm  -lmem_util -lraster -lrdpar -lvector -lcoords -lm
+gcc -Wall  -O2 -g  -o ssg ssg.o  -L../../../lib/Darwin-x86_64  random.o rpu.o ssio.o wallsio.o  -lm  -lmem_util -lraster -lrdpar -lvector -lcoords -lm
+gcc -Wall  -O2 -g  -o ssgen ssgen.o  -L../../../lib/Darwin-x86_64  random.o rpu.o ssio.o wallsio.o  -lm  -lmem_util -lraster -lrdpar -lvector -lcoords -lm
+gcc -Wall  -O2 -g  -o ssgetopt ssgetopt.o  -L../../../lib/Darwin-x86_64  random.o rpu.o ssio.o wallsio.o  -lm  -lmem_util -lraster -lrdpar -lvector -lcoords -lm
+gcc -Wall  -O2 -g  -o ssgh ssgh.o  -L../../../lib/Darwin-x86_64  random.o rpu.o ssio.o wallsio.o  -lm  -lmem_util -lraster -lrdpar -lvector -lcoords -lm
+gcc -Wall  -O2 -g  -o ssgrid ssgrid.o  -L../../../lib/Darwin-x86_64  random.o rpu.o ssio.o wallsio.o  -lm  -lmem_util -lraster -lrdpar -lvector -lcoords -lm
+gcc -Wall  -O2 -g  -o ssic ssic.o  -L../../../lib/Darwin-x86_64  random.o rpu.o ssio.o wallsio.o  -lm  -lmem_util -lraster -lrdpar -lvector -lcoords -lm
+gcc -Wall  -O2 -g  -o ssinfo ssinfo.o  -L../../../lib/Darwin-x86_64  random.o rpu.o ssio.o wallsio.o  -lm  -lmem_util -lraster -lrdpar -lvector -lcoords -lm
+gcc -Wall  -O2 -g  -o ssn ssn.o  -L../../../lib/Darwin-x86_64  random.o rpu.o ssio.o wallsio.o  -lm  -lmem_util -lraster -lrdpar -lvector -lcoords -lm
+gcc -Wall  -O2 -g  -o sst sst.o  -L../../../lib/Darwin-x86_64  random.o rpu.o ssio.o wallsio.o  -lm  -lmem_util -lraster -lrdpar -lvector -lcoords -lm
+gcc -Wall  -O2 -g  -o sstidal sstidal.o  -L../../../lib/Darwin-x86_64  random.o rpu.o ssio.o wallsio.o  -lm  -lmem_util -lraster -lrdpar -lvector -lcoords -lm
+gcc -Wall  -O2 -g  -o sstumbler sstumbler.o  -L../../../lib/Darwin-x86_64  random.o rpu.o ssio.o wallsio.o  -lm  -lmem_util -lraster -lrdpar -lvector -lcoords -lm
+gcc -Wall  -O2 -g  -o ssx ssx.o  -L../../../lib/Darwin-x86_64  random.o rpu.o ssio.o wallsio.o  -lm  -lmem_util -lraster -lrdpar -lvector -lcoords -lm
+gcc -Wall  -O2 -g  -o txt2dem txt2dem.o  -L../../../lib/Darwin-x86_64  random.o rpu.o ssio.o wallsio.o  -lm  -lmem_util -lraster -lrdpar -lvector -lcoords -lm
+gcc -Wall  -O2 -g  -o txt2spr txt2spr.o  -L../../../lib/Darwin-x86_64  random.o rpu.o ssio.o wallsio.o  -lm  -lmem_util -lraster -lrdpar -lvector -lcoords -lm
+gcc -Wall  -c -O2 -g -D_REENTRANT  -I../../../../include ../mdl.c
+gcc -Wall  -c -O2 -g -I../../../mdl/pthread -DCONSERVE_FRAC=1.0e-12 -DCOLLISIONS -DDEM -DDEM_TWOLAYERS -DWALLS -D_REENTRANT   -I../../../../include ../../aggs.c
+gcc -Wall  -c -O2 -g -I../../../mdl/pthread -DCONSERVE_FRAC=1.0e-12 -DCOLLISIONS -DDEM -DDEM_TWOLAYERS -DWALLS -D_REENTRANT   -I../../../../include ../../collision.c
+gcc -Wall  -c -O2 -g -I../../../mdl/pthread -DCONSERVE_FRAC=1.0e-12 -DCOLLISIONS -DDEM -DDEM_TWOLAYERS -DWALLS -D_REENTRANT   -I../../../../include ../../collmod.c
+gcc -Wall  -c -O2 -g -I../../../mdl/pthread -DCONSERVE_FRAC=1.0e-12 -DCOLLISIONS -DDEM -DDEM_TWOLAYERS -DWALLS -D_REENTRANT   -I../../../../include ../../cosmo.c
+gcc -Wall  -c -O2 -g -I../../../mdl/pthread -DCONSERVE_FRAC=1.0e-12 -DCOLLISIONS -DDEM -DDEM_TWOLAYERS -DWALLS -D_REENTRANT   -I../../../../include ../../deltohel.c
+gcc -Wall  -c -O2 -g -I../../../mdl/pthread -DCONSERVE_FRAC=1.0e-12 -DCOLLISIONS -DDEM -DDEM_TWOLAYERS -DWALLS -D_REENTRANT   -I../../../../include ../../dem.c
+gcc -Wall  -c -O2 -g -I../../../mdl/pthread -DCONSERVE_FRAC=1.0e-12 -DCOLLISIONS -DDEM -DDEM_TWOLAYERS -DWALLS -D_REENTRANT   -I../../../../include ../../dffuncs.c
+gcc -Wall  -c -O2 -g -I../../../mdl/pthread -DCONSERVE_FRAC=1.0e-12 -DCOLLISIONS -DDEM -DDEM_TWOLAYERS -DWALLS -D_REENTRANT   -I../../../../include ../../dumpframe.c
+gcc -Wall  -c -O2 -g -I../../../mdl/pthread -DCONSERVE_FRAC=1.0e-12 -DCOLLISIONS -DDEM -DDEM_TWOLAYERS -DWALLS -D_REENTRANT   -I../../../../include ../../dumpvoxel.c
+gcc -Wall  -c -O2 -g -I../../../mdl/pthread -DCONSERVE_FRAC=1.0e-12 -DCOLLISIONS -DDEM -DDEM_TWOLAYERS -DWALLS -D_REENTRANT   -I../../../../include ../../eccanom.c
+gcc -Wall  -c -O2 -g -I../../../mdl/pthread -DCONSERVE_FRAC=1.0e-12 -DCOLLISIONS -DDEM -DDEM_TWOLAYERS -DWALLS -D_REENTRANT   -I../../../../include ../../erf.c
+gcc -Wall  -c -O2 -g -I../../../mdl/pthread -DCONSERVE_FRAC=1.0e-12 -DCOLLISIONS -DDEM -DDEM_TWOLAYERS -DWALLS -D_REENTRANT   -I../../../../include ../../ewald.c
+gcc -Wall  -c -O2 -g -I../../../mdl/pthread -DCONSERVE_FRAC=1.0e-12 -DCOLLISIONS -DDEM -DDEM_TWOLAYERS -DWALLS -D_REENTRANT   -I../../../../include ../../fdl.c
+gcc -Wall  -c -O2 -g -I../../../mdl/pthread -DCONSERVE_FRAC=1.0e-12 -DCOLLISIONS -DDEM -DDEM_TWOLAYERS -DWALLS -D_REENTRANT   -I../../../../include ../../grav.c
+gcc -Wall  -c -O2 -g -I../../../mdl/pthread -DCONSERVE_FRAC=1.0e-12 -DCOLLISIONS -DDEM -DDEM_TWOLAYERS -DWALLS -D_REENTRANT   -I../../../../include ../../grdrag.c
+gcc -Wall  -c -O2 -g -I../../../mdl/pthread -DCONSERVE_FRAC=1.0e-12 -DCOLLISIONS -DDEM -DDEM_TWOLAYERS -DWALLS -D_REENTRANT   -I../../../../include ../../heltodel.c
+gcc -Wall  -c -O2 -g -I../../../mdl/pthread -DCONSERVE_FRAC=1.0e-12 -DCOLLISIONS -DDEM -DDEM_TWOLAYERS -DWALLS -D_REENTRANT   -I../../../../include ../../htable.c
+gcc -Wall  -c -O2 -g -I../../../mdl/pthread -DCONSERVE_FRAC=1.0e-12 -DCOLLISIONS -DDEM -DDEM_TWOLAYERS -DWALLS -D_REENTRANT   -I../../../../include ../../hypanom.c
+gcc -Wall  -c -O2 -g -I../../../mdl/pthread -DCONSERVE_FRAC=1.0e-12 -DCOLLISIONS -DDEM -DDEM_TWOLAYERS -DWALLS -D_REENTRANT   -I../../../../include ../../hyperlib.c
+gcc -Wall  -c -O2 -g -I../../../mdl/pthread -DCONSERVE_FRAC=1.0e-12 -DCOLLISIONS -DDEM -DDEM_TWOLAYERS -DWALLS -D_REENTRANT   -I../../../../include ../../linalg.c
+gcc -Wall  -c -O2 -g -I../../../mdl/pthread -DCONSERVE_FRAC=1.0e-12 -DCOLLISIONS -DDEM -DDEM_TWOLAYERS -DWALLS -D_REENTRANT   -I../../../../include ../../main.c
+gcc -Wall  -c -O2 -g -I../../../mdl/pthread -DCONSERVE_FRAC=1.0e-12 -DCOLLISIONS -DDEM -DDEM_TWOLAYERS -DWALLS -D_REENTRANT   -I../../../../include ../../master.c
+gcc -Wall  -c -O2 -g -I../../../mdl/pthread -DCONSERVE_FRAC=1.0e-12 -DCOLLISIONS -DDEM -DDEM_TWOLAYERS -DWALLS -D_REENTRANT   -I../../../../include ../../outtype.c
+gcc -Wall  -c -O2 -g -I../../../mdl/pthread -DCONSERVE_FRAC=1.0e-12 -DCOLLISIONS -DDEM -DDEM_TWOLAYERS -DWALLS -D_REENTRANT   -I../../../../include ../../param.c
+gcc -Wall  -c -O2 -g -I../../../mdl/pthread -DCONSERVE_FRAC=1.0e-12 -DCOLLISIONS -DDEM -DDEM_TWOLAYERS -DWALLS -D_REENTRANT   -I../../../../include ../../paranom.c
+gcc -Wall  -c -O2 -g -I../../../mdl/pthread -DCONSERVE_FRAC=1.0e-12 -DCOLLISIONS -DDEM -DDEM_TWOLAYERS -DWALLS -D_REENTRANT   -I../../../../include ../../pkd.c
+gcc -Wall  -c -O2 -g -I../../../mdl/pthread -DCONSERVE_FRAC=1.0e-12 -DCOLLISIONS -DDEM -DDEM_TWOLAYERS -DWALLS -D_REENTRANT   -I../../../../include ../../polyroots.c
+gcc -Wall  -c -O2 -g -I../../../mdl/pthread -DCONSERVE_FRAC=1.0e-12 -DCOLLISIONS -DDEM -DDEM_TWOLAYERS -DWALLS -D_REENTRANT   -I../../../../include ../../pst.c
+gcc -Wall  -c -O2 -g -I../../../mdl/pthread -DCONSERVE_FRAC=1.0e-12 -DCOLLISIONS -DDEM -DDEM_TWOLAYERS -DWALLS -D_REENTRANT   -I../../../../include ../../random.c
+gcc -Wall  -c -O2 -g -I../../../mdl/pthread -DCONSERVE_FRAC=1.0e-12 -DCOLLISIONS -DDEM -DDEM_TWOLAYERS -DWALLS -D_REENTRANT   -I../../../../include ../../romberg.c
+gcc -Wall  -c -O2 -g -I../../../mdl/pthread -DCONSERVE_FRAC=1.0e-12 -DCOLLISIONS -DDEM -DDEM_TWOLAYERS -DWALLS -D_REENTRANT   -I../../../../include ../../rotbar.c
+gcc -Wall  -c -O2 -g -I../../../mdl/pthread -DCONSERVE_FRAC=1.0e-12 -DCOLLISIONS -DDEM -DDEM_TWOLAYERS -DWALLS -D_REENTRANT   -I../../../../include ../../rubble.c
+gcc -Wall  -c -O2 -g -I../../../mdl/pthread -DCONSERVE_FRAC=1.0e-12 -DCOLLISIONS -DDEM -DDEM_TWOLAYERS -DWALLS -D_REENTRANT   -I../../../../include ../../runge.c
+gcc -Wall  -c -O2 -g -I../../../mdl/pthread -DCONSERVE_FRAC=1.0e-12 -DCOLLISIONS -DDEM -DDEM_TWOLAYERS -DWALLS -D_REENTRANT   -I../../../../include ../../smooth.c
+gcc -Wall  -c -O2 -g -I../../../mdl/pthread -DCONSERVE_FRAC=1.0e-12 -DCOLLISIONS -DDEM -DDEM_TWOLAYERS -DWALLS -D_REENTRANT   -I../../../../include ../../smoothfcn.c
+gcc -Wall  -c -O2 -g -I../../../mdl/pthread -DCONSERVE_FRAC=1.0e-12 -DCOLLISIONS -DDEM -DDEM_TWOLAYERS -DWALLS -D_REENTRANT   -I../../../../include ../../special.c
+gcc -Wall  -c -O2 -g -I../../../mdl/pthread -DCONSERVE_FRAC=1.0e-12 -DCOLLISIONS -DDEM -DDEM_TWOLAYERS -DWALLS -D_REENTRANT   -I../../../../include ../../springs.c
+gcc -Wall  -c -O2 -g -I../../../mdl/pthread -DCONSERVE_FRAC=1.0e-12 -DCOLLISIONS -DDEM -DDEM_TWOLAYERS -DWALLS -D_REENTRANT   -I../../../../include ../../ssio.c
+gcc -Wall  -c -O2 -g -I../../../mdl/pthread -DCONSERVE_FRAC=1.0e-12 -DCOLLISIONS -DDEM -DDEM_TWOLAYERS -DWALLS -D_REENTRANT   -I../../../../include ../../v_sqrt1.c
+gcc -Wall  -c -O2 -g -I../../../mdl/pthread -DCONSERVE_FRAC=1.0e-12 -DCOLLISIONS -DDEM -DDEM_TWOLAYERS -DWALLS -D_REENTRANT   -I../../../../include ../../walk.c
+gcc -Wall  -c -O2 -g -I../../../mdl/pthread -DCONSERVE_FRAC=1.0e-12 -DCOLLISIONS -DDEM -DDEM_TWOLAYERS -DWALLS -D_REENTRANT   -I../../../../include ../../walls.c
+gcc -Wall  -c -O2 -g -I../../../mdl/pthread -DCONSERVE_FRAC=1.0e-12 -DCOLLISIONS -DDEM -DDEM_TWOLAYERS -DWALLS -D_REENTRANT   -I../../../../include ../../wallsio.c
+gcc -Wall  -o pkdgrav aggs.o collision.o collmod.o cosmo.o deltohel.o dem.o dffuncs.o dumpframe.o dumpvoxel.o eccanom.o erf.o ewald.o fdl.o grav.o grdrag.o heltodel.o htable.o hypanom.o hyperlib.o linalg.o main.o master.o outtype.o param.o paranom.o pkd.o polyroots.o pst.o random.o romberg.o rotbar.o rubble.o runge.o smooth.o smoothfcn.o special.o springs.o ssio.o v_sqrt1.o walk.o walls.o wallsio.o  ../../../mdl/pthread/Darwin-x86_64/mdl.o     -lm  

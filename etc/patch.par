@@ -1,0 +1,199 @@
+# Sample pkdgrav parameters for Solar System run...
+#
+nDigits		= 9		# output file digit mask; compare with nSteps
+bParaRead	= 1		# enable parallel reads? (should usually work)
+bParaWrite	= 1		# enable parallel writes? (may get NFS problem)
+bUseWallClock	= 0		# time using wall clock? (instead of CPU time)
+bKDK		= 1		# for now always use Kick-Drift-Kick scheme
+dDelta		= 2.37988732550648821559e-6 # 1/4000 orb # maximum step in units of yr / 2 pi
+nSteps		= 32000000	# number of steps in intervals of dDelta
+iStartStep	= 0		# use this to change starting step numbering
+dTheta		= 0.7		# critical opening angle for tree (in radians)
+bDoGravity	= 1		# include gravity (interparticle + external)?
+bDoSelfGravity	= 0		# include interparticle gravity?
+bHeliocentric	= 0		# use heliocentric reference frame?
+dCentMass	= 2.8587803529234331e-04	# central mass in helio (or PATCH) frame (M_Sun)
+bFandG		= 0		# use Gauss' F & G function (Kepler) drift?
+achDataSubPath	= .		# extension to PTOOLS_DATA_PATH, if used
+achInFile	= patchic.ss	# initial conditions file
+achOutName	= ss		# output file prefix
+dExtraStore	= 0.1		# fractional extra storage per processor
+bStandard	= 0		# use old Tipsy I/O format if applicable
+#
+# Multistepping...
+#
+bGravStep	= 0		# use "gravity" stepping?
+bEpsAccStep	= 0		# use "epsilon-on-a" stepping?
+bSqrtPhiStep	= 0		# divide dEta by 3.5 to get steps/orbit
+bDensityStep	= 0		# nominal 0.02-0.03 (same for SqrtPhi)
+dEta		= 0.0		# 2 pi / dEta steps per orbit
+iMaxRung	= 1		# min step = dDelta / 2^(iMaxRung - 1)
+#
+# Output control...
+#
+iOutInterval	= 320000	# general output file interval in timesteps
+iRedOutInterval	= 32000		# reduced-output interval in timesteps
+iLogInterval	= 3200		# log interval in timesteps
+iCheckInterval	= 3200000	# checkpoint interval in timesteps
+bVWarnings	= 1		# display warnings?
+bVStart		= 1		# display starting info?
+bVStep		= 0		# display step info? (incl. MFlops, cache, etc.)
+bVRungStat	= 0		# display multistepping rung statistics?
+bVDetails	= 0		# display very verbose details?
+bDoDensity	= 0		# output density files?
+bDodtOutput	= 0		# output timestep files?
+bDoIOrderOutput	= 0		# output iOrder numbers?
+#
+# External potentials...
+#
+bRotFrame	= 0		# use rotating frame?
+dOmega		= 0		# dOmega = 8766/T, T in hours
+dOmegaDot	= 0		# dOmegaDot = 8766x, x in 1/h/(yr/2pi)
+#
+# Patch stuff...
+# NOTE: dCentMass (above) MUST be set to a sensible value
+# NOTE: some values can be copied conveniently from patchic.log...
+#
+bPatch		= 1		# use orbiting patch reference frame?
+dOrbDist	= 8.6899632996111510e-04		# orbital distance of patch center (in AU)
+bPeriodic	= 1		# use periodic boundary conditions?
+dxPeriod	= 1.2460738912927036e-07	# x width of boundary (0 for none)
+dyPeriod	= 1.0381163849458551e-10	# y width of boundary (0 for none)
+dzPeriod	= 0		# z width of boundary (0 for none)
+nReplicas	= 3		# number of ghost rings to use
+bEwald		= 0		# apply Ewald correction?
+#
+bExtPert	= 0		# add external patch perturber?
+dPertOrbDist	= 0		# orbital distance of perturber (in AU)
+dPertMass	= 0		# mass of perturber (in M_Sun)
+dPertMaxZ	= 0		# max vertical displacement of perturber (in AU)
+dPertOrbFreqZ	= 0		# vert orb freq of perturber (in 2 pi rad/yr)
+dPertPhase	= 0		# initial orbital phase of perturber (in rad)
+dPertPhaseZ	= 0		# initial vertical phase of perturber (in rad)
+#
+bRandAzWrap	= 0		# randomize particles on azimuthal wrap?
+bNoRandomX	= 0		# disable randomization of radial (x) component?
+nWrapAttempts	= 10		# max number of randomization attempts on wrap
+iStripOption	= 0		# 0=left only,1=right only,2=both
+dStripInner	= 0		# inner strip edge, patch width units (max 0.5)
+dStripOuter	= 0		# outer strip edge, patch width units (max 0.5)
+dVelDispX	= 0		# radial vel disp for randomization
+dVelDispY	= 0		# azimuthal vel disp for randomization
+dAvgVertAmp	= 0		# mean vertical oscillation amplitude (in AU)
+dAvgMass	= 0		# avg particle mass (in M_Sun) for randomization
+#
+# Support for simple gas drag...
+#
+bSimpleGasDrag	= 0		# use simple gas drag?
+bEpstein	= 1		# in Epstein regime?
+dGamma		= 1.0e-11	# coefficient for inverse stopping time
+#
+# Following parameters are unique to COLLISIONS code...
+#
+nSmooth		= 16	# neighbors to check for collision (1 disables)
+bAllowSimulColl	= 1		 # allow simultaneous collisions?
+bFindRejects	= 0		# check for Hill sphere/particle overlap in ICs?
+iCollLogOption	= 0		# 0=none,1=verbose(text),2=terse(binary)
+dSmallStep	= 0.0		# 0 disables encounter detection [OBSOLETE!]
+dxUnifGrav	= 0.0		# x component of uniform gravity field
+dyUnifGrav	= 0.0		# y component of uniform gravity field
+dzUnifGrav	= 0.0		# z component of uniform gravity field
+iOutcomes	= 2		# 2^0=MERGE(1);2^1=BOUNCE(2);2^2=FRAG(4)
+dMergeLimit	= 0.0		# fraction of escape speed (< 0 ==> absolute)
+dDensity	= 0.0		# merged particle density in cgs (0 to disable)
+iDensityAltCol	= 0		# particle color for alternate density (0 none)
+dDensityAltVal	= 0.0		# alternate particle density in cgs
+iEpsNOption	= 0		# 0=ConstEps,1=PowerLaw,2=Compacted,3=Borderies
+dEpsN		= 0.5		# normal restitution coefficient (1=elastic)
+dEpsT		= 1.0		# tangential restitution coefficient (1=smooth)
+dEpsNCoef	= 0.0		# (see note on power law parameters below)
+dEpsNExp	= 0.0		# (ditto)
+dEpsNVStar	= 0.0		# for Borderies et al. 1984 law (cm/s)
+dEpsNMin	= 0.0		# minimum allowed EpsN for variable EpsN laws
+iSlideOption	= 0		# 0=escape speed,1=maximum travel (see note)
+dSlideLimit	= 0.0		# value depends on slide option
+dSlideEpsN	= 1.0		# EpsN to use if impact speed < minimum
+dSlideEpsT	= 1.0		# EpsT to use if impact speed < minimum
+dCollapseLimit	= 0.0		# inelastic collapse detection limit
+dCollapseEpsN	= 1.0		# EpsN to use in event of inelastic collapse
+dCollapseEpsT	= 1.0		# EpsT to use in event of inelastic collapse
+dCrushLimit	= 0.0		# max speed squared in system units (or 0)
+dCrushEpsN	= 0.2		# EpsN to use if impact speed > maximum
+dCrushEpsT	= 1.0		# EpsT to use if impact speed > maximum
+iOverlapOption	= 0		# 0=error,1=backstep,2=adjpos,3=repel,4=merge
+bStrictOverlap	= 0		# particles overlapping even if receding?
+dBackstepLimit	= 0.0		# max backstep (< 0 ==> dDelta units, 0=inf)
+dAdjPosLimit	= 0.0		# smallest position adjustment (> 0 and < 1)
+dRepelFac	= 0.0		# scaling for overlap repel (must be > 0)
+dFragLimit	= 0.0		# fraction of escape speed (< 0 ==> absolute)
+#
+# For time-variable parameters...
+#
+achUnifGravFile	= ""		# use empty string for no variable gravity
+#
+# Note on EpsN power law parameters: Bridges et al. 1984 found coef 0.32 and
+# exp -0.234 for frosty ice at 200K; Hatzes et al. 1988 found coef 0.48 and
+# exp -0.20 for frosty ice at 120K; Supulver et al. 1995 found coef 0.52 and
+# exp -0.14 for glancing ice collisions (dEpsT = 0.9).
+#
+# Note on slide option: option 0 limit is dSlideLimit times mutual escape
+# speed; option 1 limit is speed attained from rest after accelerating over
+# distance dSlideLimit in uniform gravity field.  For option 1, dSlideLimit
+# should probably be 1% or less of maximum particle radius.
+#
+# Force override options (only material strength currently implemented)...
+#
+iForceOverrideOption	= 2	# 0=none,1=van der Walls,2=material strength
+#
+# UNCOMMENT following for SPRINGS compile option (with material strength)...
+#
+###dMeanYoungsModulus	= 0.0	# in Pascals
+###dMeanStrainLimit	= 0.0	# (dimensionless)
+###dYoungsStdDev	= 0.0	# in Pascals
+###dStrainStdDev	= 0.0	# (dimensionless)
+###dMaxStrainLimit	= 1.0	# (dimensionless)
+###dLinkageLength	= 2.5	# in effective radii (if no springs file)
+###dZeroStrainLength	= 0.0	# in effective radii (0=initial separation)
+###dDamp		= 0.0	# (dimensionless: fraction of critical damping)
+###dPorosityFactor	= 1.0	# to compute effective cross-sectional area
+###bReadSpringsData	= 0	# read initial springs data from file?
+#
+# UNCOMMENT following for DEM compile option (with material strength)...
+#
+dKn			= 1.487482e-17	# norm spring constant (force/length)
+dKt			= -1		# tang spring constant (-1 for dflt)
+dMuS			= 0.0		# coef of static friction
+dMuR			= 0.0		# coef of rolling friction
+dMuT			= 0.0		# coef of twisting friction
+dMinorFrac		= 0.10		# overlap fraction for minor warning
+dMajorFrac		= 0.25		# overlap fraction for major warning
+dErrorFrac		= 0.50		# overlap fraction for error
+bReadDEMData		= 0		# read initial DEM data from file?
+iDEMStatsInterval	= 32000		# DEM stats output interval in timesteps
+#
+# UNCOMMENT following for AGGS or AGGS_IN_PATCH compile options...
+#
+###bAggsSolveQuartic	= 0	# use quartic eqn collision prediction?
+#
+# Strength parameters for aggregates.  Strength law calculated as:
+#    strength = coef * radius^exp
+# where radius is an estimate of the aggregate size in centimetres
+# (coef must be adjusted so strength is in units of dyne/cm^2).
+#
+###dTensileCoef	= -1.0		# see note above (0=no strength,-ve==>rigid)
+###dTensileExp	= 0.0		# power law strength exponent (0=constant)
+###dShearCoef	= -1.0		# see note above (0=no strength,-ve==>rigid)
+###dShearExp	= 0.0		# power law strength exponent (0=constant)
+#
+# For walls (WALLS compile option) only...
+#
+# Wall file format: see msrWallsGetData() in master.c
+#
+###achWallsFile		= ""	# use empty string for no walls
+###bWallsEdgeDetect	= 1	# for finite walls only -- expensive!
+###bWallsSolveQuartic	= 0	# for particles stuck on rotating cylinders
+#
+# For special particles... (SPECIAL compile option)
+#
+###achSpecialFile	= ""	# use empty string for no special particles
+#

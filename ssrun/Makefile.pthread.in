@@ -1,0 +1,50 @@
+# User-editable compile options for pkdgrav
+
+# Choose compilers and global options here...
+CC=gcc -Wall #-ffloat-store
+#CC=icc
+#CC=gcc -mtune=core-avx-i -march=core-avx-i -ggdb
+
+MPICC=mpicc
+#MPICC=mpicc -mtune=core-avx-i -march=core-avx-i -ggdb
+
+#CFLAGS=-g
+CFLAGS=-O2 -g
+LDFLAGS=
+LDLIBS=
+
+# Choose pkdgrav parallel option...
+#PKDGRAV_TYPE=null
+#PKDGRAV_TYPE=mpi
+PKDGRAV_TYPE=pthread
+
+# Choose pkdgrav functionality options (not all are mutually compatible)...
+USE_COLLISIONS=true
+#USE_AGGREGATES=true
+#USE_SPRINGS=true
+USE_DEM=true
+USE_DEM_TWOLAYERS=true
+USE_WALLS=true
+#USE_SLIDING_PATCH=true
+#USE_RUBBLE=true
+#USE_COLLMOD=true
+
+# Following only used for rubble and collmod variants (0 to disable)...
+ORIGIN_HISTOGRAM_BINS=10 # NOTE: needs to be same as no. of dust bins
+
+# Following sets maximum fractional difference in conserved quantities
+# (especially mass) before printing a warning.  The larger the number
+# of particles, the larger this value has to be to suppress warnings
+# due to round-off error.  (The reported difference also changes with
+# the number of processors, due to changes in summation order.)
+PKD_CFLAGS+=-DCONSERVE_FRAC=1.0e-12
+
+# Uncomment the following to turn on FPE trapping (Linux only)...
+#PKD_AND_SS_CFLAGS+=-DTRAP_FPE=1
+
+# Option to turn on optimized mpi parallel I/O (comment out to disable)...
+#USE_PARALLEL_IO=true
+
+# Some compilers for pthreads need the following...
+#PTHREAD_SWITCH=-pthread
+#PTHREAD_LDLIBS=-lpthread

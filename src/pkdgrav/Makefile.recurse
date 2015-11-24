@@ -1,0 +1,35 @@
+VPATH	= ../..
+MDL	= $(VPATH)/../mdl/$(PKDGRAV_TYPE)
+SS	= $(VPATH)/../ss
+EXE	= pkdgrav
+MDLOBJ	= $(MDL)/$(OS)/mdl.o #DEBUG figure this out $(SS)/$(OS)/ssio.o
+
+TOP	= $(VPATH)/../..
+INCS=-I$(TOP)/include
+BIN_DEST = $(TOP)/bin/$(OS)
+
+CFLAGS+=-I$(MDL) $(PKD_CFLAGS) $(PKD_AND_SS_CFLAGS)
+LDFLAGS+=$(PKD_LDFLAGS)
+LDLIBS+=$(PKD_LDLIBS)
+
+#OBJ	= $(shell ls ../../*.c | sed 's/.*\/\(\w\+\).c/\1.o/g')
+SRC=$(shell cd ../.. && ls *.c)
+OBJ=$(SRC:.c=.o)
+
+all: $(EXE)
+	@cp $(EXE) ../../../../bin/$(OS)/$(EXE).$(PKDGRAV_TYPE)
+
+$(EXE): $(OBJ) $(XOBJ)
+	$(CC) -o $(EXE) $(OBJ) $(XOBJ) $(MDLOBJ) $(LDFLAGS) $(LDLIBS)
+	@rm -f $(BIN_DEST)/$@
+	@cp $@ $(BIN_DEST)
+
+*.o: ../../Makefile ../../Makefile.in Makefile.recurse
+%.o: %.c
+	$(CC) -c $(CFLAGS) $(INCS) $(VPATH)/$*.c
+
+clean:
+	rm -f $(OBJ) $(XOBJ) *.o $(EXE)
+
+$(OBJ) $(XOBJ): $(TOP)/include/ssio.h pkd.h
+

@@ -1,0 +1,27 @@
+SRCS	= rastoppm.c
+TARGETS = rastoppm
+
+VPATH	= ..
+TOP	= $(VPATH)/../..
+
+INCS	= -I$(VPATH) -I$(TOP)/include
+LIBS	=
+
+BIN_DEST = $(TOP)/bin/$(OS)
+
+OBJS = $(SRCS:.c=.o)
+
+all: $(TARGETS)
+
+$(TARGETS): rastoppm.o
+	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $@.o $(LIBS)
+	@rm -f $(BIN_DEST)/$@
+	@cp $@ $(BIN_DEST)
+
+*.o: ../../../Makefile ../../../Makefile.in Makefile.recurse
+%.o: %.c
+	$(CC) -c $(CFLAGS) $(INCS) $(VPATH)/$*.c
+
+clean:
+	rm -f *.o rastoppm
+

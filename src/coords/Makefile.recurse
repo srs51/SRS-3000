@@ -1,0 +1,27 @@
+SRCS	= deltohel.c eccanom.c heltodel.c hypanom.c hyperlib.c paranom.c
+TARGETS = libcoords.a
+
+VPATH	= ..
+TOP	= $(VPATH)/../..
+
+INCS	= -I$(TOP)/include
+
+LIB_DEST = $(TOP)/lib/$(OS)
+
+OBJS = $(SRCS:.c=.o)
+
+all: $(TARGETS)
+
+libcoords.a: $(OBJS)
+	@$(AR) rcv $@ $(OBJS) 1> /dev/null
+	@ranlib $@
+	@rm -f $(LIB_DEST)/$@
+	@cp $@ $(LIB_DEST)
+
+*.o: ../../../Makefile ../../../Makefile.in Makefile.recurse
+%.o: %.c
+	$(CC) -c $(CFLAGS) $(INCS) $(VPATH)/$*.c
+
+clean:
+	rm -f *.o $(TARGETS)
+

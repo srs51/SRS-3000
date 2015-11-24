@@ -1,0 +1,389 @@
+#!/bin/csh -f
+#
+# optional arguments:
+#   field 1=CC, 2=CFLAGS, 3=LDFLAGS, 4=MPICC, 5=MPICFLAGS, 6=MPILIB, 7=XLIB
+#
+set template = Makefile.tmpl
+#
+if !(-d templates) then
+	echo No Makefile templates directory\!
+	exit 1
+endif
+#
+# the grep -v on erf & v_sqrt1 is a hack to get around XOBJ in templates...
+set OBJ = (`\ls -1 *.c | grep -v erf | grep -v v_sqrt1 | sed 's/.c$/.o/'`)
+#
+if ($#OBJ == 0) then
+	echo No source files found
+	exit 1
+endif
+#
+set mdl = ../mdl
+#
+if !(-d $mdl) then
+	echo $mdl directory not found
+	exit 1
+endif
+#
+set targets = (pkdgrav collisions aggregates springs DEM rubble_planetesimals sliding_patch simple_gas_drag patch_with_drag walls gr_drag aggs_in_patch walls_with_DEM walls_with_DEM_and_aggs DEM_with_charge DEM_TIDAL_SPACE DEM_TIDAL_LOCAL other)
+set modes = (null mpi pthread ALL)
+set options = (optimize debug profile)
+#
+set target_dflt = 2
+set mode_dflt = 1
+set option_dflt = 1
+set use_origin_hist_dflt = n
+set num_origin_bins_dflt = 15
+set CODEDEF_override_dflt = ""
+set trap_fpe_dflt = n
+if (-e build.cfg) source build.cfg
+#
+set OS = `uname | sed 's/ //'`-`uname -m | sed 's/ //'`
+#
+@ i = 1
+foreach choice ($targets)
+	echo -n $i. $choice
+	if ($i == $target_dflt) echo -n ' [DEFAULT]'
+	echo ''
+	@ i++
+end
+@ loop = 1
+while ($loop)
+	echo -n Select target by number:' '
+	set target = $<
+	if ("$target" == "") @ target = $target_dflt
+	if ($target >= 1 && $target <= $#targets) @ loop = 0
+end
+#
+set target_str = $targets[$target]
+echo Target selected = \"$target_str\"
+#
+set use_origin_hist = $use_origin_hist_dflt
+set num_origin_bins = $num_origin_bins_dflt
+set CODEDEF_override = "$CODEDEF_override_dflt"
+if ($target_str == rubble_planetesimals) then
+	@ loop = 1
+	while ($loop)
+		echo -n "Use origin histograms [$use_origin_hist_dflt]? "
+		set yn = $<
+		if ("$yn" == "") set yn = $use_origin_hist_dflt
+		set use_origin_hist = `echo $yn | tr YN yn`
+		if ("$use_origin_hist" == y || "$use_origin_hist" == n) @ loop = 0
+	end
+	echo Use origin histograms = $use_origin_hist
+	if ($use_origin_hist == y) then
+		@ loop = 1
+		while ($loop)
+			echo -n "Number of origin bins to use [$num_origin_bins_dflt]? "
+			set num_origin_bins = $<
+			if ("$num_origin_bins" == "") @ num_origin_bins = $num_origin_bins_dflt
+			if ($num_origin_bins > 0) @ loop = 0
+		end
+		echo Number of origin bins = $num_origin_bins
+	endif
+else if ($target_str == other) then
+	echo "Enter desired macro sequence (e.g., -DOPTION1 -DOPTION2):"
+	echo '[DEFAULT = "'$CODEDEF_override_dflt'"]'
+	set CODEDEF_override = "$<"
+	if ("$CODEDEF_override" == "") set CODEDEF_override = "$CODEDEF_override_dflt"
+	echo Macro sequence = \"$CODEDEF_override\"
+endif
+#
+@ i = 1
+foreach choice ($modes)
+	echo -n $i. $choice
+	if ($i == $mode_dflt) echo -n ' [DEFAULT]'
+	echo ''
+	@ i++
+end
+@ loop = 1
+while ($loop)
+	echo -n Select mode:' '
+	set mode = $<
+	if ("$mode" == "") @ mode = $mode_dflt
+	if ($mode >= 1 && $mode <= $#modes) @ loop = 0
+end
+#
+set mode0 = $mode
+set mode_str = $modes[$mode0]
+echo Mode selected = \"$mode_str\"
+#
+if ($#argv > 1) @ option_dflt = 0
+@ i = 1
+foreach choice ($options)
+	echo -n $i. $choice
+	if ($i == $option_dflt) echo -n ' [DEFAULT]'
+	echo ''
+	@ i++
+end
+if ($option_dflt == 0 && $#argv > 1) then
+	echo -n '['press ENTER to choose CFLAGS=\"$argv[2]\"
+	if ($#argv > 2) echo -n , LDFLAGS=\"$argv[3]\"
+	echo ']'
+endif
+@ loop = 1
+while ($loop)
+	echo -n Select option:' '
+	set option = $<
+	if ("$option" == "") @ option = $option_dflt
+	if ($#argv > 1 && $option == 0) @ loop = 0
+	if ($option >= 1 && $option <= $#options) @ loop = 0
+end
+if ($option == 0) then
+	set option_str = build_default
+else
+	set option_str = $options[$option]
+endif
+#
+echo Option selected = \"$option_str\"
+#
+@ loop = 1
+while ($loop)
+	echo -n "Turn on floating point exception trapping [$trap_fpe_dflt]? "
+	set yn = $<
+	if ("$yn" == "") set yn = $trap_fpe_dflt
+	set trap_fpe = `echo $yn | tr YN yn`
+	if ($trap_fpe == y || $trap_fpe == n) @ loop = 0
+end
+#
+echo Trap FPEs = $trap_fpe
+#
+# save new defaults...
+#
+cat >! build.cfg << EOF
+set target_dflt = $target
+set mode_dflt = $mode0
+set option_dflt = $option
+set use_origin_hist_dflt = $use_origin_hist
+set num_origin_bins_dflt = $num_origin_bins
+set CODEDEF_override_dflt = "$CODEDEF_override"
+set trap_fpe_dflt = $trap_fpe
+EOF
+#
+@ rv_all = 0
+#
+foreach mode ($modes)
+	if ($mode == ALL || ($mode_str != ALL && $mode != $mode_str)) continue
+	echo -n Making \"$target_str $mode
+	if ($option_str != none && $option_str != build_default) echo -n ' '$option_str
+	echo \" on $OS...
+	#
+	if !(-d $mdl/$mode) then
+		echo $mdl/$mode subdirectory not found...skipping this mode
+		continue
+	endif
+	#
+	if !(-d $mode) then
+		echo $mode subdirectory not found...building
+		mkdir $mode
+	endif
+	#
+	if !(-e $mode/$template) then
+		echo $mode/$template not found...copying
+		if !(-e templates/Makefile.$mode) then
+			echo $mode Makefile template not found...skipping this mode
+			continue
+		endif
+		cp templates/Makefile.$mode $mode/$template
+	endif
+	#
+	if !(-e $mdl/$mode/$template) then
+		echo $mdl/$mode/$template not found...copying
+		if !(-e templates/mdl/Makefile.$mode) then
+			echo $mode mdl Makefile template not found...skipping this mode
+			continue
+		endif
+		cp templates/mdl/Makefile.$mode $mdl/$mode/$template
+	endif
+	#
+	switch ($target_str)
+	case pkdgrav:
+		set EXE = pkdgrav
+		set CODEDEF = ""
+		breaksw
+	case collisions:
+		set EXE = pkdgrav
+		set CODEDEF = -DCOLLISIONS
+		breaksw
+	case aggregates:
+		set EXE = pkdgrav
+		set CODEDEF = "-DCOLLISIONS -DAGGS"
+		breaksw
+	case springs:
+		set EXE = pkdgrav
+		set CODEDEF = "-DCOLLISIONS -DSPRINGS"
+		breaksw
+	case DEM:
+		set EXE = pkdgrav
+		set CODEDEF = "-DCOLLISIONS -DDEM"
+		breaksw
+	case rubble_planetesimals:
+		set EXE = pkdgrav
+		set CODEDEF = "-DCOLLISIONS -DRUBBLE_ZML"
+		if ($use_origin_hist == y) set CODEDEF = ("$CODEDEF" -DORIGIN_HISTOGRAM -DNUM_ORIGIN_BINS=$num_origin_bins)
+		breaksw
+	case sliding_patch:
+		set EXE = pkdgrav
+		set CODEDEF = "-DCOLLISIONS -DSLIDING_PATCH"
+		breaksw
+	case simple_gas_drag:
+		set EXE = pkdgrav
+		set CODEDEF = "-DCOLLISIONS -DSIMPLE_GAS_DRAG"
+		breaksw
+	case patch_with_drag:
+		set EXE = pkdgrav
+		set CODEDEF = "-DCOLLISIONS -DSLIDING_PATCH -DSIMPLE_GAS_DRAG"
+		breaksw
+	case walls:
+		set EXE = pkdgrav
+		set CODEDEF = "-DCOLLISIONS -DWALLS"
+		breaksw
+	case gr_drag:
+		set EXE = pkdgrav
+		set CODEDEF = "-DCOLLISIONS -DGR_DRAG"
+		breaksw
+	case aggs_in_patch:
+		set EXE = pkdgrav
+		set CODEDEF = "-DCOLLISIONS -DAGGS -DSLIDING_PATCH -DAGGS_IN_PATCH"
+		breaksw
+	case walls_with_DEM:
+		set EXE = pkdgrav
+		set CODEDEF = "-DCOLLISIONS -DDEM -DWALLS"
+		breaksw
+	case walls_with_DEM_and_aggs:
+		set EXE = pkdgrav
+		set CODEDEF = "-DCOLLISIONS -DDEM -DWALLS -DAGGS"
+		breaksw
+	case DEM_with_charge:
+		set EXE = pkdgrav
+		set CODEDEF = "-DCOLLISIONS -DDEM -DWALLS -DCHARGE"
+		breaksw
+	case DEM_TIDAL_SPACE:
+		set EXE = pkdgrav
+		set CODEDEF = "-DCOLLISIONS -DAGGS -DDEM_TIDAL_SPACE"
+		breaksw
+	case DEM_TIDAL_LOCAL:
+		set EXE = pkdgrav
+		set CODEDEF = "-DCOLLISIONS -DDEM -DWALLS -DDEM_TIDAL_LOCAL"
+		breaksw
+	case other:
+		set EXE = pkdgrav
+		set CODEDEF = "$CODEDEF_override"
+		breaksw
+	default:
+		echo Unknown target '('$target')'...ignored.
+		continue
+	endsw
+	#
+	if !(-d $mode/"$OS") then
+		echo Creating $mode/$OS directory
+		mkdir $mode/"$OS"
+		if ($status) continue
+	endif
+	#
+	if !(-d $mdl/$mode/"$OS") then
+		echo Creating $mdl/$mode/$OS directory
+		mkdir $mdl/$mode/"$OS"
+		if ($status) continue
+	endif
+	#
+	switch ($option_str)
+	case build_default:
+		set CFLAGS = "$argv[2]"
+		set LDFLAGS = "$argv[3]"
+		breaksw
+	case optimize:
+		set CFLAGS = '-O2 -g'
+		set LDFLAGS = '' # '-Wl,-s'
+		breaksw
+	case debug:
+		set CFLAGS = -g3 # '-g3 -O2'
+		set LDFLAGS = ''
+		breaksw
+	case profile:
+		set CFLAGS = '-pg -O2'
+		set LDFLAGS = ''
+		breaksw
+	default:
+		set CFLAGS =
+		set LDFLAGS =
+	endsw
+	#
+	if ($#argv > 6) then
+		set XLIB = "$argv[7]"
+	else
+		set XLIB =
+	endif
+	#
+	set MAKE = make
+	foreach dir ($path)
+		if (-e $dir/gmake) then
+			set MAKE = gmake
+			break
+		endif
+	end
+	#
+	if ($#argv > 0) then
+		set CC = "$argv[1]"
+	else
+		set CC = "gcc -Wall -ffloat-store"
+	endif
+	#
+	if ("$OS" == SunOS) set LDFLAGS = ($LDFLAGS -lnsl -ldl)
+	#
+	switch ($mode)
+	case mpi:
+		if ($#argv > 3) then
+			set CC = "$argv[4]"
+			if ($#argv > 4) then
+				set CFLAGS = "$CFLAGS $argv[5]"
+				if ($#argv > 5) then
+					set XLIB = "$argv[6] $XLIB"
+				endif
+			endif
+		else
+			set CC = mpicc
+			if ($#argv > 0)\
+				echo WARNING: build CC overridden by mpicc
+		endif
+		breaksw
+	endsw
+	#
+	if ($trap_fpe == y) set CODEDEF = ($CODEDEF -DTRAP_FPE=1)
+	#
+	alias make $MAKE
+	#
+	foreach dest ({$mdl/,}$mode/"$OS")
+		mv -f $dest/Makefile{,.old} >& /dev/null
+		cat $dest/../$template |\
+			sed s@BUILD_OS@"$OS"@ |\
+			sed s@BUILD_MAKE@"$MAKE"@ |\
+			sed s@BUILD_EXE@"$EXE"@ |\
+			sed s@BUILD_CC@"$CC"@ |\
+			sed s@BUILD_CODEDEF@"$CODEDEF"@ |\
+			sed s@BUILD_CFLAGS@"$CFLAGS"@ |\
+			sed s@BUILD_LDFLAGS@"$LDFLAGS"@ |\
+			sed s@BUILD_OBJ@"$OBJ"@ |\
+			sed s@BUILD_XLIB@"$XLIB"@ >! $dest/Makefile
+		chmod a-w $dest/Makefile
+		diff $dest/Makefile{,.old} >& /dev/null
+		if ($status == 1) rm -f $dest/*.o >& /dev/null
+	end
+	#
+	pushd $mode/"$OS" >& /dev/null
+	make
+	@ rv = $status
+	popd >& /dev/null
+	#
+	if ($rv) then
+		echo Error code $rv occured during make
+		@ rv_all = $rv
+		continue
+	endif
+	#
+	echo Done building $cwd/$mode/$OS/$EXE
+	#
+end
+#
+if ($rv_all != 0) exit $rv_all
+#

@@ -1,0 +1,129 @@
+#ifndef DEM_HINCLUDED
+#define DEM_HINCLUDED
+
+#include "linalg.h"
+
+/*
+** for parallel jobs, it seems that there can be problems with the
+** cache size due to the relatively large particle struct sizes.  The
+** demand on the cache size will be affected by
+** MAX_NUM_OVERLAPS_PER_PARTICLE and
+** MAX_NUM_OVERLAPS_PER_PARTICLE_FOR_WALLS, which are defined below.
+** If either of these numbers need to be increased, more parameters
+** are added to the DEM_PARAMS struct, or the number of particles per
+** processor is high, consider increasing MDL_CACHE_SIZE in mdl.h.
+*/
+
+#define MAX_NUM_OVERLAPS_PER_PARTICLE 12
+
+#ifndef WALLS
+#define MAX_NUM_OVERLAPS_PER_PARTICLE_FOR_WALLS 0
+#else
+#define MAX_NUM_OVERLAPS_PER_PARTICLE_FOR_WALLS 7
+#endif
+
+typedef struct {
+  int iOrder;
+  double vShear[3];
+  double vnOld[3];
+#if defined(__APPLE__) && defined(__LP64__) /* to prevent compiler warning on MacOS X */
+  int liOverlapCounter;
+#else
+  long int liOverlapCounter;
+#endif
+#ifdef DEM_TWOLAYERS
+  int bInner;
+#endif
+  } DEM_ELEMENT;
+
+typedef struct {
+  /* dEpsN, dEpsT, and dDelta are same as in parameter file (for now) */
+  double dEpsN;
+  double dEpsT;
+  double dDelta;
+  /* user-supplied parameters */
+  double dKn;
+  double dKt;
+  double dKnInner;
+  double dKtInner;
+  double dInnerOverlapBoundary;
+  double dMuS;
+  double dMuR;
+  double dMuT;
+  double dAccCrit;
+  double dTangentialSpringDrag; /*DEBUG: might be timestep dependent parameter - consider revising */
+  double dMinorFrac,dMajorFrac,dErrorFrac;
+  /*DEBUG
+  ** could make dTangentialSpringDrag a rate of decay (e.g. see note in master.c)
+  ** or binary (i.e. no decay, instant decay)
+  */
+  int bReadDEMData;
+  int iDEMStatsInterval;
+  } DEM_PARAMS;
+
+#define DEMHEAD_SIZE SSHEAD_SIZE /* same struct */
+
+#define DEMDATA_SIZE (8*(MAX_NUM_OVERLAPS_PER_PARTICLE+MAX_NUM_OVERLAPS_PER_PARTICLE_FOR_WALLS))
+
+#define DEM_NUM_OVERLAP_BINS 100
+#define DEM_NUM_COS_A_BINS   100
+#define DEM_NUM_S_BINS       100
+
+typedef struct {
+  FLOAT fDistMin,fSpeedMax;
+  int pOverlapHist[DEM_NUM_OVERLAP_BINS];
+  int pCosAHist[DEM_NUM_COS_A_BINS];
+  int pSHist[DEM_NUM_S_BINS];
+} DEM_STATS;
+
+typedef struct {
+  FLOAT fDistMin,fSpeedMax,fOverlap,fCosA,fS2;
+} DEM_STATS_PARTICLE;
+
+#ifdef DEM_TIDAL_SPACE
+/* specify marker iOrder numbers here; particles should not be coplanar */
+#define IORDER_MARKER1 0
+#define IORDER_MARKER2 62
+#define IORDER_MARKER3 101
+#define PLANET_COLOR 4 /* blue */
+#endif
+
+#ifdef DEM_TIDAL_LOCAL
+#define PLANET_MASS 3.0034689055351672e-06 /* 1 M_Earth in M_Sun */
+/* specify local frame origin & gravity vector here (use get_local.tcsh!) */
+#define LOCAL_ORIG_X (-1.1224161397443008e-08)
+#define LOCAL_ORIG_Y (-1.2960545208483053e-09)
+#define LOCAL_ORIG_Z (1.8328978809586364e-09)
+#define LOCAL_GRAV_X (0.092058741745686)
+#define LOCAL_GRAV_Y (0.046172926339131)
+#define LOCAL_GRAV_Z (-0.060803261269753)
+#define LOCAL_SURF_X (-0.5)
+#define LOCAL_SURF_Y (-0.4)
+#define LOCAL_SURF_Z (-0.3)
+#endif
+
+#if defined(DEM_TIDAL_SPACE) || defined(DEM_TIDAL_LOCAL)
+#define DEM_TIDAL_FILENAME "dem_tidal_acc.dat"
+typedef struct {
+  double dTime;
+  double vPlanetPos[3];
+  double vPlanetVel[3]; /* not used currently */
+  double vAggPos[3]; /* starts at zero, but will drift */
+  double vAggVel[3]; /* starts at zero, but will drift; not used */
+  double vAggSpin[3]; /* in space frame */
+  double vAggAcc[3]; 
+  double vAggSpinDot[3]; /* in space frame; this is torque per unit mass */
+  double vMarker1Pos[3];
+  double vMarker1Vel[3];
+  double vMarker2Pos[3];
+  double vMarker2Vel[3];
+  double vMarker3Pos[3];
+  double vMarker3Vel[3];
+  } DEM_TIDAL;
+#endif
+
+/* function prototypes */
+
+int demCheckOverlapPoint(const Vector vRelPos,double dRadSq);
+
+#endif /* !DEM_HINCLUDED */

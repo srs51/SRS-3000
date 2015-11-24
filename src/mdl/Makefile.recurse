@@ -1,0 +1,14 @@
+VPATH	= ..
+TOP	= $(VPATH)/../../..
+INCS	= -I$(TOP)/include
+
+OBJ=mdl.o
+default: $(OBJ)
+
+*.o: ../../../Makefile ../../../Makefile.in Makefile.recurse
+%.o: %.c
+	$(CC) -c $(CFLAGS) $(PTHREAD_CFLAGS) $(INCS) $(VPATH)/$*.c
+
+clean:
+	rm -f $(OBJ)
+

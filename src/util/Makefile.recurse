@@ -1,0 +1,28 @@
+SRCS	= mem_util.c raster.c rdpar.c vector.c
+TARGETS = libmem_util.a libraster.a librdpar.a libvector.a
+
+VPATH	= ..
+TOP	= $(VPATH)/../..
+
+INCS	= -I$(TOP)/include
+
+LIB_DEST = $(TOP)/lib/$(OS)/
+
+OBJS = $(SRCS:.c=.o)
+
+all: $(TARGETS)
+
+$(TARGETS): lib%.a: $(OBJS)
+	@mkdir -p $(LIB_DEST)
+	@$(AR) rcv $@ $*.o 1> /dev/null
+	@ranlib $@
+	@rm -f $(LIB_DEST)/$@
+	@cp $@ $(LIB_DEST)/$@
+
+*.o: ../../../Makefile ../../../Makefile.in Makefile.recurse
+%.o: %.c
+	$(CC) -c $(CFLAGS) $(INCS) $(VPATH)/$*.c
+
+clean:
+	rm -f *.o $(TARGETS)
+
